@@ -1,0 +1,55 @@
+body { 
+    background: #ACFFFF; 
+	#background-image: url("clouds.jpg");
+ } 
+
+table {
+	 width: 50%;
+	 horizontal-align: center;
+}
+ 
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 5px;
+}
+
+#title{
+	background-color:lightblue;
+}
+
+.right {
+    float: right;
+    width: 300px;
+}
+.left{
+    float: left;
+    width: 300px;
+	height: auto;
+}
+
+.bottom{
+	float: bottom;
+}
+
+.container{
+	width:100%;
+	height:auto;
+}
+
+ .imageDetails {
+	margin-right:2%;
+	float: right;
+	height:400px;
+	width:304px; 
+} 
+
+.text1 {
+	margin-left:2%;
+	float:left; 
+	height:400px;
+	width:75%; 
+} 
