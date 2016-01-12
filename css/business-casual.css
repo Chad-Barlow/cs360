@@ -39,6 +39,10 @@ hr {
 /*.container{position:relative;float:left;}
 .overlay{top:0;left:0;width:90%;height:100%;position:absolute;}
 */
+td { 
+    padding: 2%;
+}
+
 .brand,
 .address-bar {
     display: none;
