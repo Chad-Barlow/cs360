@@ -1,0 +1,1 @@
+$('.overlay').click(function(){alert('hello');})
