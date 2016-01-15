@@ -62,14 +62,23 @@ int  main(int argc, char* argv[])
         printf("\nCould not connect to host\n");
         return 0;
     }
-
+    #define MAXGET 1000
+	//figure out how to do memory management in c right here.
+	char *message = (char *)malloc(MAXGET);
+	sprintf(message, "GET /foo.html HTTP/1.1\r\nHost:mclement.us:80\r\n\r\n");
+	// send HTTP on the socket
+	printf("Request: %s\n", message);
+	write(hSocket,message,strlen(message));
+	//Read response back from the socket
+    nReadAmount=read(hSocket,pBuffer,BUFFER_SIZE);
+	printf("Response: %s\n", pBuffer);
+	
+	
     /* read from socket into buffer
     ** number returned by read() and write() is the number of bytes
     ** read or written, with -1 being that an error occured */
-    nReadAmount=read(hSocket,pBuffer,BUFFER_SIZE);
     printf("\nReceived \"%s\" from server\n",pBuffer);
     /* write what we received back to the server */
-    write(hSocket,pBuffer,nReadAmount);
     printf("\nWriting \"%s\" to server",pBuffer);
 
     printf("\nClosing socket\n");
