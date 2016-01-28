@@ -2,6 +2,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <string>
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -10,6 +11,7 @@
 #define SOCKET_ERROR        -1
 #define BUFFER_SIZE         100
 #define HOST_NAME_SIZE      255
+using std::string;
 
 int  main(int argc, char* argv[])
 {
@@ -21,16 +23,37 @@ int  main(int argc, char* argv[])
     unsigned nReadAmount;
     char strHostName[HOST_NAME_SIZE];
     int nHostPort;
+	int option;
+	bool debugging;
+	int count;
+	string url = "localhost";
 
-    if(argc < 3)
+    if(argc < 4)
       {
-        printf("\nUsage: client host-name host-port\n");
+        printf("\nUsage: client host-name host-port URL options: -c count, -d debugging\n");
         return 0;
       }
     else
       {
+		while ((option = getopt(argc,argv,"d:c:")) != -1) {
+			switch (option) {
+				case 'd':
+					debugging = true;
+					//port = atoi(optarg);
+					break;
+				case 'c':
+					count = atoi(optarg);
+					//host = optarg;
+					break;
+				default:
+					//cout << "client [-d debugging] [-c count]" << endl;
+					exit(EXIT_FAILURE);
+			}
+		}
+  
         strcpy(strHostName,argv[1]);
         nHostPort=atoi(argv[2]);
+		URL = argv[3];
       }
 
     printf("\nMaking a socket");
@@ -72,14 +95,6 @@ int  main(int argc, char* argv[])
 	//Read response back from the socket
     nReadAmount=read(hSocket,pBuffer,BUFFER_SIZE);
 	printf("Response: %s\n", pBuffer);
-	
-	
-    /* read from socket into buffer
-    ** number returned by read() and write() is the number of bytes
-    ** read or written, with -1 being that an error occured */
-    printf("\nReceived \"%s\" from server\n",pBuffer);
-    /* write what we received back to the server */
-    printf("\nWriting \"%s\" to server",pBuffer);
 
     printf("\nClosing socket\n");
     /* close socket */                       
@@ -88,4 +103,5 @@ int  main(int argc, char* argv[])
         printf("\nCould not close socket\n");
         return 0;
     }
+	free(message);
 }
