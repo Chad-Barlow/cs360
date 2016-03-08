@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+<head>
+<title>City Finder</title>
+<script src="https://code.jquery.com/jquery-1.11.0.js"></script>
+<script>
+	$(document).ready(function() {
+		$( "#cityfield" ).keyup(function() {
+			//alert( "Handler for .keyup() called." );
+			//$("#txtHint").text("Keyup"); 
+			//var url = "https://api.wunderground.com/api/APIKEY/geolookup/conditions/q/Utah/Provo.json"+$("#cityfield").val();
+			var url = "../getcity?q="+$("#cityfield").val();
+			$.getJSON(url,function(data){
+			//$.getJSON("staticCity.txt",function(data){
+				//console.log("Got "+data);
+				//console.log("Got "+data[0]);
+				//console.log("Got "+data[0].city);
+				var everything;
+				everything = "<ul>";
+				$.each(data, function(i,item) {
+					everything += "<li> "+data[i].city;
+				});
+			
+				everything += "</ul>";
+				$("#txtHint").html(everything);
+			})
+			.done(function() { console.log('getJSON request succeeded!'); })
+			.fail(function(jqXHR, textStatus, errorThrown) {
+				console.log('getJSON request failed! ' + textStatus);
+				console.log("incoming "+jqXHR.responseText);
+			})
+			.always(function() { console.log('getJSON request ended!');
+			//$("#txtHint").text("Keyup "+$("#cityfield").val());
+			})
+			.complete(function() { console.log("complete"); });
+		});
+		
+		 $("#button").click(function(e){ 
+		 	var value = $("#cityfield").val(); 
+		 	console.log(value); 
+		 	e.preventDefault(); 
+		 	$("#dispcity").text(value);	
+		 	var myurl= "https://api.wunderground.com/api/0dbde639a293ba5d/geolookup/conditions/q/UT/";
+		 	myurl += value; 
+		 	myurl += ".json"; 
+		 	console.log(myurl); 
+		 	$.ajax({ 
+		 		url : myurl, 
+		 		dataType : "jsonp", 	
+	 			success : function(parsed_json) { 
+		 			console.log(parsed_json); 
+		 			var location = parsed_json['location']['city']; 
+		 			var temp_string = parsed_json['current_observation']['temperature_string']; 
+		 			var current_weather = parsed_json['current_observation']['weather']; 
+		 			everything = "<ul>"; everything += "<li>Location: "+location; 
+		 			everything += "<li>Temperature: "+temp_string; 
+		 			everything += "<li>Weather: "+current_weather; 
+		 			everything += "</ul>"; 
+		 			$("#weather").html(everything); 
+	 			}
+		 	});
+		 });
+		 
+		 $("#poke-button").click(function(e){ 
+		 	var value = $("#pokenum").val(); 
+		 	console.log(value); 
+		 	e.preventDefault(); 
+		 	var myurl= "../getpoke?q=";
+		 	myurl += value; 
+		 	console.log(myurl); 
+		 	$.ajax({ 
+		 		url : myurl, 
+		 		dataType : "json", 	
+	 			success : function(parsed_json) { 
+		 			console.log(parsed_json); 
+		 			var name = parsed_json['name'];
+		 			var temp_string = parsed_json['height']; 
+		 			var weight = parsed_json['weight']; 
+		 			everything = "<ul>"; everything += "<li>Name: "+name; 
+		 			everything += "<li>Height: "+temp_string; 
+		 			everything += "<li>Weight: "+weight; 
+		 			everything += "</ul>"; 
+		 			everything += "<img src=\"http://pokeapi.co/media/img/"+value+".png\">";
+		 			$("#pokemon").html(everything); 
+	 			}
+		 	});
+		 });
+	});
+</script>
+</head>
+
+<body>
+<form>
+Enter A Utah City: <input type="text" id="cityfield" value=""><br>
+Suggestion: <span id="txtHint">Empty</span>
+<input id="button" type="submit" value="Submit">
+</form>
+<p>City</p>
+<textarea id="dispcity">No City</textarea>
+<p>Current Weather</p>
+<div id="weather">No weather</div>
+
+
+<form>
+<br>
+Pokemon Fun!<br>
+Please enter a number between 1 and 721: <input type="text" id="pokenum" value=""><br>
+<input id="poke-button" type="submit" value="Submit">
+</form>
+<div id="pokemon">No Pokemon selected</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
